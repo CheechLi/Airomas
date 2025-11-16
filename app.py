@@ -12,12 +12,69 @@ if not OPENROUTER_API_KEY:
 
 app = Flask(__name__)
 
+designer_brands = {
+    "Tom Ford": "https://www.tomford.com/beauty/fragrance/",
+    "Chanel": "https://www.chanel.com/us/fragrance/",
+    "Dior": "https://www.dior.com/en_us/beauty/womens-fragrance",
+    "Yves Saint Laurent": "https://www.yslbeauty.com/int/fragrances.html",
+    "Armani": "https://www.armani.com/beauty/fragrance",
+    "Gucci": "https://www.gucci.com/us/en/ca/beauty/fragrance-c-beauty",
+    "Hermès": "https://www.hermes.com/us/en/category/beauty/fragrances/",
+    "Prada": "https://www.prada.com/us/en/beauty/fragrance.html",
+    "Valentino": "https://www.valentino.com/en-us/beauty/fragrance.html",
+    "Versace": "https://www.versace.com/us/en-us/women/versace-collection/fragrances/",
+    "Hugo Boss": "https://www.hugoboss.com/us/boss-bottled",
+    "Bvlgari": "https://www.bulgari.com/en-us/beauty/fragrances",
+    "Burberry": "https://www.burberry.com/us/fragrance/",
+    "Givenchy": "https://www.givenchy.com/us/fragrance",
+    "Calvin Klein": "https://www.calvinklein.us/en/fragrances",
+    "Kenzo": "https://www.kenzo.com/fragrance",
+    "Marc Jacobs": "https://www.marcjacobs.com/fragrance/",
+    "Coach": "https://www.coach.com/beauty/fragrance",
+    "Lancome": "https://www.lancome-usa.com/fragrance",
+    "Estée Lauder": "https://www.esteelauder.com/fragrance",
+    "Viktor & Rolf": "https://www.viktor-rolf.com/fragrance",
+    "Jean Paul Gaultier": "https://www.jeanpaulgaultier.com/fragrance",
+    "Dolce & Gabbana": "https://www.dolcegabbana.com/en/beauty/fragrance/",
+    "Miu Miu": "https://www.miumiu.com/us/en/beauty/fragrance.html",
+    "Valentino Beauty": "https://www.valentino.com/en-us/beauty/fragrance.html",
+    "Maison Margiela": "https://www.maisonmargiela-fragrances.us/",
+    "Tommy Hilfiger": "https://usa.tommy.com/fragrance",
+    "Ralph Lauren": "https://www.ralphlauren.com/fragrance",
+    "Issey Miyake": "https://www.isseymiyakeparfums.com/",
+    "Montblanc": "https://www.montblanc.com/en-us/fragrance",
+    "Elie Saab": "https://www.eliesaabfragrance.com/",
+    "Jo Malone": "https://www.jomalone.com/",
+    "Creed": "https://www.creedboutique.com/",
+    "Maison Francis Kurkdjian": "https://www.franciskurkdjian.com/",
+    "Byredo": "https://www.byredo.com/",
+    "Diptyque": "https://www.diptyqueparis.com/en_us/",
+    "Acqua di Parma": "https://www.acquadiparma.com/us_en/",
+    "Penhaligon's": "https://www.penhaligons.com/us/",
+    "Giorgio Armani": "https://www.armani.com/beauty/fragrance",
+    "Bottega Veneta": "https://www.bottegaveneta.com/beauty/fragrance",
+    "Fendi": "https://www.fendi.com/us/beauty/fragrance",
+    "Celine": "https://www.celine.com/en-us/beauty/fragrance",
+    "Hermione": "https://www.hermioneparfum.com/",  # niche/lesser-known
+    "Cartier": "https://www.cartier.com/en-us/collections/jewelry-and-watches/fragrance.html",
+    "Chloé": "https://www.chloe.com/us/fragrance",
+    "Balenciaga": "https://www.balenciaga.com/us/beauty/fragrance",
+    "Coach Fragrance": "https://www.coach.com/beauty/fragrance",
+    "Givenchy Beauty": "https://www.givenchybeauty.com/fragrance",
+    "Tommy Girl": "https://usa.tommy.com/fragrance",
+    "Prada Beauty": "https://www.prada.com/us/en/beauty/fragrance.html",
+    "Dolce&Gabbana Beauty": "https://www.dolcegabbana.com/en/beauty/fragrance/",
+    "Gucci Beauty": "https://www.gucci.com/us/en/ca/beauty/fragrance-c-beauty",
+}
+
 def build_scent_prompt_gemini(
     age, gender, occupation, mood, activities, style, season, scent_type, max_price
 ):
-    max_price_text = (
-        f"Only suggest fragrances priced below ${max_price}." if max_price else ""
-    )
+    max_price_text = f"Only suggest fragrances priced below ${max_price}." if max_price else ""
+    
+    # Use only the brand names in the prompt
+    brand_list_text = ", ".join(BRANDS.keys())
+    
     prompt = f"""
 You are a fragrance expert. Based on the following user traits:
 - Age: {age}
@@ -31,14 +88,15 @@ You are a fragrance expert. Based on the following user traits:
 
 {max_price_text}
 
-Suggest 3 real perfumes or colognes that fit this user.
+Select perfumes links from the following designer brand links:
+{designer_brands}
 
-For each suggestion provide:
+Suggest 3 real perfumes or colognes that fit this user. For each suggestion provide:
 - name
 - brand
 - reason (1-2 sentences)
-- Construct the official product URL by using the brand's official website domain. If unsure, give the most likely official homepage URL for that brand.
-- retail price in USD for common bottle sizes: 30ml, 50ml, 100ml (if no prices, use N/A)
+- Construct the official product URL using the brand's official website domain
+- retail price in USD for common bottle sizes: 30ml, 50ml, 100ml
 - top, middle, and base notes as lists
 
 Respond ONLY in valid JSON, no extra text. Format:
@@ -66,7 +124,6 @@ Respond ONLY in valid JSON, no extra text. Format:
 }}
 """
     return prompt
-
 
 def call_gemini(prompt):
     headers = {

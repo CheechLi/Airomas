@@ -1,16 +1,16 @@
 from flask import Flask, render_template, request
 import os
 import requests
-from dotenv import load_dotenv
 import json
 import re
 
-load_dotenv()
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
-app = Flask(__name__)
+if not OPENROUTER_API_KEY:
+    raise ValueError("OPENROUTER_API_KEY is not set! Make sure it's added in Vercel Environment Variables.")
 
+app = Flask(__name__)
 
 def build_scent_prompt_gemini(
     age, gender, occupation, mood, activities, style, season, scent_type, max_price

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat with Airomas</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='chat.css') }}" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="/" class="nav-link home">Home</a>
+      <a href="/discover" class="nav-link">Discover</a>
+      <a href="/chat" class="nav-link">Chat</a>
+    </nav>
+    <h2>Chat with Airomas</h2>
+    <p class="powered-by">
+      Powered by <strong>Google Gemini 2.5 Flash</strong>.
+    </p>
+    <div id="chatbox"></div>
+    <br />
+    <div class="input-container">
+      <input id="input" placeholder="Type your message..." />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+    <script>
+      function sendMessage() {
+        let userMessage = document.getElementById("input").value;
+        if (!userMessage) return;
+        let chatbox = document.getElementById("chatbox");
+        chatbox.innerHTML += "<p><b>You:</b> " + userMessage + "</p>";
+        fetch("/chat_api", {
+          method: "POST",
+          headers: { "Content-Type": "application/x-www-form-urlencoded" },
+          body: "message=" + encodeURIComponent(userMessage),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            chatbox.innerHTML += "<p><b>Airomas:</b> " + data.reply + "</p>";
+            chatbox.scrollTop = chatbox.scrollHeight;
+          });
+        document.getElementById("input").value = "";
+      }
+    </script>
+  </body>
+</html>

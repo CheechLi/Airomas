@@ -1,0 +1,180 @@
+/* Body and container */
+body {
+  font-family: "Playfair Display", Georgia, serif;
+  background-color: #f8f6f4;
+  margin: 0;
+  padding: 0;
+  color: #2a2a2a;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 40px;
+  text-align: center;
+}
+
+/* NAVBAR */
+.navbar {
+  width: 100%;
+  background: #b59b6f;
+  padding: 14px 0;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 6px 10px;
+  transition: 0.3s ease;
+}
+
+.navbar a:hover {
+  color: #4a90e2;
+}
+
+/* Header */
+h1 {
+  margin-bottom: 25px;
+  color: #2a2a2a;
+  font-family: "Didot", "Playfair Display", serif;
+  font-size: 4rem;
+  font-weight: 700;
+}
+
+.powered-by {
+  font-size: 14px;
+  color: #555;
+  font-style: italic;
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+
+/* Form */
+form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+form input,
+form select {
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  border: 1px solid #d1cfc8;
+  color: #2a2a2a;
+  padding: 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  flex: 1 1 200px;
+  min-width: 150px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #b59b6f; /* luxury gold */
+  color: white;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #a4885f;
+}
+
+/* Scents container: horizontal layout */
+.scents-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  margin-top: 30px;
+}
+
+/* Individual scent card */
+.scent-card {
+  flex: 0 0 32%; /* ~1/3 of width */
+  border: 1px solid #d1cfc8;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #fffefc;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Notes boxes inside each card */
+.notes-boxes {
+  margin-top: 15px;
+  width: 100%;
+}
+
+.note-box {
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 6px;
+  color: white;
+  text-align: center;
+  font-size: 13px;
+}
+
+.note-top {
+  background-color: #c49b6d;
+} /* warm gold */
+.note-middle {
+  background-color: #8c7b6b;
+} /* muted taupe */
+.note-base {
+  background-color: #5a4b3c;
+} /* deep brown */
+
+.note-box h4 {
+  margin: 0 0 5px 0;
+  font-size: 14px;
+}
+
+.note-box p {
+  margin: 0;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 900px) {
+  .scents-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .scent-card {
+    flex: 0 0 90%;
+    margin-bottom: 20px;
+  }
+
+  form {
+    flex-direction: column;
+  }
+}
+
+.scent-price a {
+  display: inline-block;
+  margin-top: 5px;
+  color: #4caf50;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.scent-price a:hover {
+  text-decoration: underline;
+}

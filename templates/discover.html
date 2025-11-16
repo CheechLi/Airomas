@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Discover</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='discover.css') }}" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <a href="/" class="nav-link home">Home</a>
+      <a href="/discover" class="nav-link">Discover</a>
+      <a href="/chat" class="nav-link">Chat</a>
+    </nav>
+    <div class="container">
+      <h1>Airomas</h1>
+      <p class="powered-by">
+        Powered by <strong>Google Gemini 2.5 Flash</strong>.
+      </p>
+      <form action="/discover" method="post">
+        <input type="text" name="age" placeholder="Age" />
+        <select name="gender">
+          <option value="">Select Gender</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
+        </select>
+        <input type="text" name="occupation" placeholder="Occupation" />
+        <input
+          type="text"
+          name="mood"
+          placeholder="Mood (Calm, Energetic...)" />
+        <input
+          type="text"
+          name="activities"
+          placeholder="Activities (Hiking, Reading...)" />
+        <input
+          type="text"
+          name="style"
+          placeholder="Style (Casual, Elegant...)" />
+        <select name="season">
+          <option value="">Select Season</option>
+          <option value="Spring">Spring</option>
+          <option value="Summer">Summer</option>
+          <option value="Autumn">Autumn</option>
+          <option value="Winter">Winter</option>
+        </select>
+        <select name="type">
+          <option value="">Select Type</option>
+          <option value="Niche">Niche</option>
+          <option value="Designer">Designer</option>
+          <option value="Clone">Clone</option>
+        </select>
+        <input
+          type="number"
+          name="max_price"
+          placeholder="Max Price (USD)"
+          min="0"
+          step="1" />
+        <button type="submit">Find My Scent</button>
+      </form>
+      {% if scents %}
+      <div class="scents-container">
+        {% for scent in scents %}
+        <div class="scent-card">
+          <h2>{{ scent.name }}</h2>
+          <h3>{{ scent.brand }}</h3>
+          <p>{{ scent.reason }}</p>
+          <div class="notes-boxes">
+            <div class="note-box note-top">
+              <h4>Top Notes</h4>
+              <p>{{ scent.notes.top | join(", ") }}</p>
+            </div>
+            <div class="note-box note-middle">
+              <h4>Middle Notes</h4>
+              <p>{{ scent.notes.middle | join(", ") }}</p>
+            </div>
+            <div class="note-box note-base">
+              <h4>Base Notes</h4>
+              <p>{{ scent.notes.base | join(", ") }}</p>
+            </div>
+          </div>
+          <div class="scent-price">
+            <p>30ml: {{ scent.price_usd["30ml"] }}</p>
+            <p>50ml: {{ scent.price_usd["50ml"] }}</p>
+            <p>100ml: {{ scent.price_usd["100ml"] }}</p>
+            <p>
+              <a href="{{ scent.official_product }}" target="_blank"
+                >Official Product</a
+              >
+            </p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>

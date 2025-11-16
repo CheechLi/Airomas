@@ -61,7 +61,6 @@ Respond ONLY in valid JSON, no extra text. Format:
         "base": ["..."]
       }}
     }},
-    ... (total 3 scents)
   ]
 }}
 """

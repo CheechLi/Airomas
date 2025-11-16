@@ -48,6 +48,15 @@ h1 {
   font-weight: 700;
 }
 
+.AI-aromas{
+  font-size: 14px;
+  color: #555;
+  font-style: italic;
+  margin-top: 10px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
 .powered-by {
   font-size: 14px;
   color: #555;

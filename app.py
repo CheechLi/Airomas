@@ -173,7 +173,3 @@ def chat_api():
     bot = result["choices"][0]["message"]["content"]
 
     return {"reply": bot}
-
-
-if __name__ == "__main__":
-    app.run(debug=True)

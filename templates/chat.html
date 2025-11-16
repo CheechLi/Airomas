@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <title>Chat with Airomas</title>
     <link
       rel="stylesheet"
@@ -35,7 +36,10 @@
         })
           .then((response) => response.json())
           .then((data) => {
-            chatbox.innerHTML += "<p><b>Airomas:</b> " + data.reply + "</p>";
+            // Convert markdown to HTML
+            let formattedReply = marked.parse(data.reply);
+            chatbox.innerHTML +=
+              "<p><b>Airomas:</b><br>" + formattedReply + "</p><br>";
             chatbox.scrollTop = chatbox.scrollHeight;
           });
         document.getElementById("input").value = "";

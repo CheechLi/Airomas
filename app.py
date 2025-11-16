@@ -160,7 +160,7 @@ def chat_api():
     }
 
     payload = {
-        "model": "openai/gpt-4.1-mini",  # or any model you prefer
+        "model": "google/gemini-2.5-flash",
         "messages": [
             {"role": "system", "content": "You are a helpful chatbot."},
             {"role": "user", "content": user_message},

@@ -37,7 +37,7 @@ For each suggestion provide:
 - name
 - brand
 - reason (1-2 sentences)
-- Construct the official product URL by using the brand's official website domain. If unsure, give the most likely official homepage URL for that brand.
+- Instead of official product URL, provide a Google search URL for the item (like "https://www.google.com/search?q=NAME+OF+ITEM").
 - retail price in USD for common bottle sizes: 30ml, 50ml, 100ml (if no prices, use N/A)
 - top, middle, and base notes as lists
 
@@ -49,7 +49,7 @@ Respond ONLY in valid JSON, no extra text. Format:
       "name": "...",
       "brand": "...",
       "reason": "...",
-      "official_product": "https://www.brand.com/product-name/",
+      "google_search": "https://www.google.com/search?q=NAME+OF+ITEM",
       "price_usd": {{
         "30ml": "$XX",
         "50ml": "$XX",
@@ -66,7 +66,6 @@ Respond ONLY in valid JSON, no extra text. Format:
 }}
 """
     return prompt
-
 
 def call_gemini(prompt):
     headers = {

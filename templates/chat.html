@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <title>Chat with Airomas</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='chat.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='chat.css') }}" />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </head>
   <body>
     <nav class="navbar">
@@ -13,35 +11,51 @@
       <a href="/discover" class="nav-link">Discover</a>
       <a href="/chat" class="nav-link">Chat</a>
     </nav>
+
     <h2>Chat with Airomas</h2>
     <p class="powered-by">
       Powered by <strong>Google Gemini 2.5 Flash</strong>.
     </p>
-    <div id="chatbox"></div>
-    <br />
+
+    <div id="chatbox" class="chatbox"></div>
+
     <div class="input-container">
       <input id="input" placeholder="Type your message..." />
       <button onclick="sendMessage()">Send</button>
     </div>
+
     <script>
       function sendMessage() {
         let userMessage = document.getElementById("input").value;
         if (!userMessage) return;
-        let chatbox = document.getElementById("chatbox");
-        chatbox.innerHTML += "<p><b>You:</b> " + userMessage + "</p>";
+
+        const chatbox = document.getElementById("chatbox");
+
+        // User message bubble
+        const userBubble = document.createElement("div");
+        userBubble.className = "message user";
+        userBubble.innerHTML = marked.parse(userMessage);
+        chatbox.appendChild(userBubble);
+
+        // Scroll to bottom
+        chatbox.scrollTop = chatbox.scrollHeight;
+
+        // Send message to server
         fetch("/chat_api", {
           method: "POST",
           headers: { "Content-Type": "application/x-www-form-urlencoded" },
           body: "message=" + encodeURIComponent(userMessage),
         })
-          .then((response) => response.json())
-          .then((data) => {
-            // Convert markdown to HTML
-            let formattedReply = marked.parse(data.reply);
-            chatbox.innerHTML +=
-              "<p><b>Airomas:</b><br>" + formattedReply + "</p><br>";
-            chatbox.scrollTop = chatbox.scrollHeight;
-          });
+        .then(res => res.json())
+        .then(data => {
+          const botBubble = document.createElement("div");
+          botBubble.className = "message bot";
+          botBubble.innerHTML = marked.parse(data.reply);
+          chatbox.appendChild(botBubble);
+
+          chatbox.scrollTop = chatbox.scrollHeight;
+        });
+
         document.getElementById("input").value = "";
       }
     </script>

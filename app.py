@@ -15,11 +15,9 @@ app = Flask(__name__)
 def build_scent_prompt_gemini(
     age, gender, occupation, mood, activities, style, season, scent_type, max_price
 ):
-    max_price_text = f"Only suggest fragrances priced below ${max_price}." if max_price else ""
-    
-    # Use only the brand names in the prompt
-    brand_list_text = ", ".join(BRANDS.keys())
-    
+    max_price_text = (
+        f"Only suggest fragrances priced below ${max_price}." if max_price else ""
+    )
     prompt = f"""
 You are a fragrance expert. Based on the following user traits:
 - Age: {age}
@@ -33,12 +31,14 @@ You are a fragrance expert. Based on the following user traits:
 
 {max_price_text}
 
-Suggest 3 real perfumes or colognes that fit this user. For each suggestion provide:
+Suggest 3 real perfumes or colognes that fit this user.
+
+For each suggestion provide:
 - name
 - brand
 - reason (1-2 sentences)
-- Construct the official product URL using the brand's official website domain
-- retail price in USD for common bottle sizes: 30ml, 50ml, 100ml
+- Construct the official product URL by using the brand's official website domain. If unsure, give the most likely official homepage URL for that brand.
+- retail price in USD for common bottle sizes: 30ml, 50ml, 100ml (if no prices, use N/A)
 - top, middle, and base notes as lists
 
 Respond ONLY in valid JSON, no extra text. Format:
@@ -66,6 +66,7 @@ Respond ONLY in valid JSON, no extra text. Format:
 }}
 """
     return prompt
+
 
 def call_gemini(prompt):
     headers = {
